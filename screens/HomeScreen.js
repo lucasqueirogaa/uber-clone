@@ -5,7 +5,7 @@ import NavOptions from "../components/NavOptions";
 
 const HomeScreen = () => {
   return (
-    <View style={tw`mt-5 p-5 bg-white`}>
+    <View style={[tw`pt-10 pl-5 bg-white`, { flex: 1 }]}>
       <View>
         <Image
           style={{
