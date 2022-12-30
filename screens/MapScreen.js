@@ -12,7 +12,7 @@ const MapScreen = () => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <View style={[tw`pt-10 bg-white`, { flex: 1 }]}>
+    <View style={[tw`bg-white`, { flex: 1 }]}>
       <View style={tw`h-1/2`}>
         <Map />
       </View>
