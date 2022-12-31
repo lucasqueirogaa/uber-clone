@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import tw from "tailwind-react-native-classnames";
 import { Icon } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
@@ -34,6 +34,7 @@ const data = [
 
 const RideOptionsCard = () => {
   const navigation = useNavigation();
+  const [selected, setSelected] = useState(null);
 
   return (
     <View style={tw`bg-white flex-grow`}>
@@ -50,9 +51,15 @@ const RideOptionsCard = () => {
       </View>
       <FlatList
         data={data}
+        style={tw`mb-2 flex-1`}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setSelected(item)}
+            style={tw`flex-row justify-between items-center px-8 ${
+              item.id === selected?.id && "bg-gray-200"
+            }`}
+          >
             <Image
               style={{
                 width: 100,
@@ -62,13 +69,25 @@ const RideOptionsCard = () => {
               source={{ uri: item.image }}
             />
 
-            <View>
-              <Text>{item.title}</Text>
+            <View style={tw`-ml-6`}>
+              <Text style={tw`text-xl font-semibold`}>{item.title}</Text>
               <Text>Travel Time...</Text>
             </View>
+            <Text style={tw`text-xl`}>$40</Text>
           </TouchableOpacity>
         )}
       />
+
+      <View>
+        <TouchableOpacity
+          disabled={!selected}
+          style={tw`bg-black py-3 m-3 ${!selected && "bg-gray-300"}`}
+        >
+          <Text style={tw`text-center text-white text-xl`}>
+            Choose {!selected ? "A Car" : selected?.title}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
