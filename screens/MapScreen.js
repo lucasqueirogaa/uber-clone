@@ -23,10 +23,10 @@ const MapScreen = () => {
               navigation.navigate("HomeScreen");
             }}
             style={[
-              tw`absolute top-8 left-3 z-50 p-1 rounded-full bg-gray-300`,
+              tw`bg-gray-100 absolute top-16 left-8 z-50 p-2 rounded-full shadow-lg`,
             ]}
           >
-            <Icon name="chevron-left" type="fontawesome" />
+            <Icon name="menu" />
           </TouchableOpacity>
         </View>
         <Map />

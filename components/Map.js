@@ -101,5 +101,3 @@ const Map = () => {
 };
 
 export default Map;
-
-const styles = StyleSheet.create({});
