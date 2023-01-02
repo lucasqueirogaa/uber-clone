@@ -1,8 +1,12 @@
 import { StyleSheet, View } from "react-native";
 import React, { useEffect, useRef } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { useSelector } from "react-redux";
-import { selectDestination, selectOrigin } from "../slices/navSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectDestination,
+  selectOrigin,
+  setTravelTimeInformation,
+} from "../slices/navSlice";
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_MAPS_APIKEY } from "@env";
 import tw from "tailwind-react-native-classnames";
@@ -12,6 +16,7 @@ const Map = () => {
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
   const mapRef = useRef(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!origin || !destination) return;
@@ -23,18 +28,21 @@ const Map = () => {
     }, 300);
   }, [origin, destination]);
 
-  const config = {
-    method: "get",
-    url: `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.description}&destinations=${destination.description}&key=${GOOGLE_MAPS_APIKEY}`,
-    headers: {},
-  };
-
   useEffect(() => {
     if (!origin || !destination) return;
 
-    axios(config)
+    const configAxios = {
+      method: "get",
+      url: `https://maps.googleapis.com/maps/api/distancematrix/json?units=metrical&origins=${origin.description}&destinations=${destination.description}&key=${GOOGLE_MAPS_APIKEY}`,
+      headers: {},
+    };
+
+    axios(configAxios)
       .then(function (response) {
-        const dataJson = JSON.stringify(response.data);
+        const dataStr = JSON.stringify(response.data.rows[0].elements[0]);
+        const dataObj = JSON.parse(dataStr);
+        console.log(dataObj);
+        dispatch(setTravelTimeInformation(dataObj));
       })
       .catch(function (error) {
         console.log(error);
