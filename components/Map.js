@@ -6,6 +6,7 @@ import { selectDestination, selectOrigin } from "../slices/navSlice";
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_MAPS_APIKEY } from "@env";
 import tw from "tailwind-react-native-classnames";
+import axios from "axios";
 
 const Map = () => {
   const origin = useSelector(selectOrigin);
@@ -21,6 +22,24 @@ const Map = () => {
       });
     }, 300);
   }, [origin, destination]);
+
+  const config = {
+    method: "get",
+    url: `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.description}&destinations=${destination.description}&key=${GOOGLE_MAPS_APIKEY}`,
+    headers: {},
+  };
+
+  useEffect(() => {
+    if (!origin || !destination) return;
+
+    axios(config)
+      .then(function (response) {
+        const dataJson = JSON.stringify(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [origin, destination, GOOGLE_MAPS_APIKEY]);
 
   return (
     <View style={tw`flex-1`}>
