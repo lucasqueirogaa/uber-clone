@@ -12,6 +12,8 @@ import { Icon } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { selectTravelTimeInformation } from "../slices/navSlice";
+// import "intl";
+// import "intl/locale-data/jsonp/en-ZA";
 
 const data = [
   {
@@ -33,6 +35,8 @@ const data = [
     image: "https://links.papareact.com/7pf",
   },
 ];
+
+const SURGE_CHARGE_RATE = 1.5;
 
 const RideOptionsCard = () => {
   const navigation = useNavigation();
@@ -61,7 +65,7 @@ const RideOptionsCard = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => setSelected(item)}
-            style={tw`flex-row justify-between items-center px-8 ${
+            style={tw`flex-row justify-between items-center px-4 ${
               item.id === selected?.id && "bg-gray-200"
             }`}
           >
@@ -76,14 +80,22 @@ const RideOptionsCard = () => {
 
             <View style={tw`-ml-6`}>
               <Text style={tw`text-xl font-semibold`}>{item.title}</Text>
-              <Text>Travel Time...</Text>
+              <Text>{travelTimeInformation?.duration.text} Travel Time</Text>
             </View>
-            <Text style={tw`text-xl`}>$40</Text>
+            <Text style={tw`text-xl`}>
+              R${" "}
+              {(
+                (travelTimeInformation?.duration.value *
+                  SURGE_CHARGE_RATE *
+                  item.multiplier) /
+                100
+              ).toFixed(2)}
+            </Text>
           </TouchableOpacity>
         )}
       />
 
-      <View>
+      <View style={tw`mt-auto border-t border-gray-200`}>
         <TouchableOpacity
           disabled={!selected}
           style={tw`bg-black py-3 m-3 ${!selected && "bg-gray-300"}`}
